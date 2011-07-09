@@ -1,8 +1,5 @@
 package com.billkoch.example.jpa.repository.impl;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 
 import javax.persistence.EntityManager;
@@ -20,7 +17,7 @@ import com.billkoch.example.jpa.repository.CustomerRepository;
 public class CustomerRepositoryJpaImplTest {
 
 	private CustomerRepository uut;
-	
+
 	@Mock
 	private EntityManager mockEntityManager;
 
@@ -30,15 +27,13 @@ public class CustomerRepositoryJpaImplTest {
 	public void setup() {
 		uut = new CustomerRepositoryJpaImpl();
 		((CustomerRepositoryJpaImpl) uut).entityManager = mockEntityManager;
-		
+
 		customer = new Customer();
 	}
 
 	@Test
 	public void savingACustomerShouldInteractWithTheEntityManager() {
-		String id = uut.save(customer);
-
+		uut.save(customer);
 		verify(mockEntityManager).persist(customer);
-		assertThat(id, is(notNullValue()));
 	}
 }
