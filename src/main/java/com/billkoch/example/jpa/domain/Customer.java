@@ -19,4 +19,17 @@ public class Customer {
 	public void setId(String id) {
 		this.id = id;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		boolean result = false;
+		if(this == obj) {
+			result = true;
+			
+		} else if(obj instanceof Customer) {
+			Customer that = (Customer) obj;
+			result = this.id.equals(that.id);
+		}
+		return result;
+	}
 }
