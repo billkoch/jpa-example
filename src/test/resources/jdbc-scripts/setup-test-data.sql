@@ -1,1 +1,1 @@
-insert into customer values(1);
+insert into customer(id, last_name) values(1, 'Koch');

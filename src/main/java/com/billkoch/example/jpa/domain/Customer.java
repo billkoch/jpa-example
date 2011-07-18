@@ -1,5 +1,6 @@
 package com.billkoch.example.jpa.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +12,17 @@ public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String id;
+	
+	@Column(name="last_name")
+	private String lastName;
+	
+	public Customer() {
+		this("");
+	}
+	
+	public Customer(String lastName) {
+		this.lastName = lastName;
+	}
 
 	public String getId() {
 		return id;
@@ -18,6 +30,14 @@ public class Customer {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public String getLastName() {
+		return lastName;
+	}
+	
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	@Override

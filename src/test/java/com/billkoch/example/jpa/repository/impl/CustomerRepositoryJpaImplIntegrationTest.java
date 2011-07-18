@@ -32,7 +32,7 @@ public class CustomerRepositoryJpaImplIntegrationTest extends AbstractTransactio
 
 	@Before
 	public void setup() {
-		customer = new Customer();
+		customer = new Customer("Koch");
 	}
 
 	@Test
@@ -43,16 +43,16 @@ public class CustomerRepositoryJpaImplIntegrationTest extends AbstractTransactio
 		assertThat(customerId, is(not(equalTo(""))));
 		
 		Customer persistedCustomer = super.simpleJdbcTemplate.queryForObject("select id from customer c where c.id=?"
-				, new RowMapper() {
+				, new RowMapper<Customer>() {
 
 					@Override
-					public Object mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
+					public Customer mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
 						Customer persistedCustomer = new Customer();
 						persistedCustomer.setId(resultSet.getString("id"));
 						return persistedCustomer;
 					}
 				}
-				, new String[]{customerId});
+				, new Object[]{customerId});
 		
 		assertThat(customer, is(persistedCustomer));
 	}
