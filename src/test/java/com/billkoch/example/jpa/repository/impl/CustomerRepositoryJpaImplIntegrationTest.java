@@ -2,12 +2,15 @@ package com.billkoch.example.jpa.repository.impl;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.collection.IsIn.isIn;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,5 +58,17 @@ public class CustomerRepositoryJpaImplIntegrationTest extends AbstractTransactio
 				, new Object[]{customerId});
 		
 		assertThat(customer, is(persistedCustomer));
+	}
+	
+	@Test
+	public void withLastNameLikeShouldReturnListOfCustomers() {
+		List<Customer> customersWithLastNameLikeKoch = this.uut.withLastNameLike("Koch");
+		
+		Customer expectedCustomer = new Customer("Koch");
+		expectedCustomer.setId("1");
+		
+		assertThat(customersWithLastNameLikeKoch, is(notNullValue()));
+		assertThat(customersWithLastNameLikeKoch, hasSize(1));
+		assertThat(expectedCustomer, isIn(customersWithLastNameLikeKoch));
 	}
 }

@@ -1,5 +1,7 @@
 package com.billkoch.example.jpa.repository.impl;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -18,5 +20,10 @@ public class CustomerRepositoryJpaImpl implements CustomerRepository {
 	public String save(Customer customer) {
 		entityManager.persist(customer);
 		return customer.getId();
+	}
+
+	@Override
+	public List<Customer> withLastNameLike(String lastName) {
+		return entityManager.createQuery("select c from Customer c where lastName like :lastName").setParameter("lastName", lastName).getResultList();
 	}
 }
