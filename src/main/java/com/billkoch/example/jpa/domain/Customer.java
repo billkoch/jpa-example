@@ -8,19 +8,23 @@ import javax.persistence.Id;
 
 @Entity
 public class Customer {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String id;
+
+	@Column(name = "first_name")
+	private String firstName;
 	
-	@Column(name="last_name")
+	@Column(name = "last_name")
 	private String lastName;
 	
 	public Customer() {
-		this("");
+		this("", "");
 	}
-	
-	public Customer(String lastName) {
+
+	public Customer(String firstName, String lastName) {
+		this.firstName = firstName;
 		this.lastName = lastName;
 	}
 
@@ -31,11 +35,19 @@ public class Customer {
 	public void setId(String id) {
 		this.id = id;
 	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+	
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 	
 	public String getLastName() {
 		return lastName;
 	}
-	
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
@@ -43,10 +55,10 @@ public class Customer {
 	@Override
 	public boolean equals(Object obj) {
 		boolean result = false;
-		if(this == obj) {
+		if (this == obj) {
 			result = true;
-			
-		} else if(obj instanceof Customer) {
+
+		} else if (obj instanceof Customer) {
 			Customer that = (Customer) obj;
 			result = this.id.equals(that.id);
 		}

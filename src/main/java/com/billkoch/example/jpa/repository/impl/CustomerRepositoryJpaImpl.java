@@ -24,6 +24,11 @@ public class CustomerRepositoryJpaImpl implements CustomerRepository {
 
 	@Override
 	public List<Customer> withLastNameLike(String lastName) {
-		return entityManager.createQuery("select c from Customer c where lastName like :lastName").setParameter("lastName", lastName).getResultList();
+		return entityManager.createQuery("select c from Customer c where lastName like :lastName", Customer.class).setParameter("lastName", lastName).getResultList();
+	}
+
+	@Override
+	public List<Customer> withFirstNameLike(String firstName) {
+		return entityManager.createQuery("select c from Customer c where firstName like :firstName", Customer.class).setParameter("firstName", firstName).getResultList();
 	}
 }

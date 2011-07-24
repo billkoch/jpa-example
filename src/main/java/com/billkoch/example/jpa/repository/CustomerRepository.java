@@ -8,5 +8,7 @@ public interface CustomerRepository {
 
 	String save(Customer customer);
 
-	List<Customer> withLastNameLike(String string);
+	List<Customer> withLastNameLike(String lastName);
+
+	List<Customer> withFirstNameLike(String firstName);
 }
