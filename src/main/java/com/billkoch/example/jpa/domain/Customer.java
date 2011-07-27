@@ -5,7 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
+@NamedQueries({
+	@NamedQuery(name="withLastNameLike", query="select c from Customer c where lastName like :lastName"),
+	@NamedQuery(name="withFirstNameLike", query="select c from Customer c where firstName like :firstName")
+})
 @Entity
 public class Customer {
 

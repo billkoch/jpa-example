@@ -1,7 +1,6 @@
 package com.billkoch.example.jpa.repository.impl;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
@@ -41,7 +40,7 @@ public class CustomerRepositoryJpaImplTest {
 		uut = new CustomerRepositoryJpaImpl();
 		((CustomerRepositoryJpaImpl) uut).entityManager = mockEntityManager;
 
-		customer = new Customer();
+		customer = new Customer("Bill", "Koch");
 	}
 
 	@Test
@@ -52,34 +51,34 @@ public class CustomerRepositoryJpaImplTest {
 
 	@Test
 	public void retrievingCustomersWithLastNameLikeShouldInteractWithTheEntityManager() {
-		when(mockEntityManager.createQuery(anyString(), (Class<Customer>) anyObject())).thenReturn(mockQuery);
+		when(mockEntityManager.createNamedQuery(anyString(), (Class<Customer>) anyObject())).thenReturn(mockQuery);
 		when(mockQuery.setParameter(anyString(), anyString())).thenReturn(mockQuery);
 
-		List<Customer> expectedCustomerList = Lists.newArrayList(new Customer("Koch", "Bill"));
+		List<Customer> expectedCustomerList = Lists.newArrayList(customer);
 		when(mockQuery.getResultList()).thenReturn(expectedCustomerList);
 
 		List<Customer> customersWithLastNameLikeKoch = uut.withLastNameLike("Koch");
 
-		assertThat(customersWithLastNameLikeKoch, is(notNullValue()));
+		assertThat(customersWithLastNameLikeKoch, is(expectedCustomerList));
 
-		verify(mockEntityManager).createQuery(anyString(), (Class<Customer>) anyObject());
+		verify(mockEntityManager).createNamedQuery(anyString(), (Class<Customer>) anyObject());
 		verify(mockQuery).setParameter(anyString(), anyString());
 		verify(mockQuery).getResultList();
 	}
 
 	@Test
 	public void retrievingCustomersWithFirstNameLikeShouldInteractWithTheEntityManager() {
-		when(mockEntityManager.createQuery(anyString(), (Class<Customer>) anyObject())).thenReturn(mockQuery);
+		when(mockEntityManager.createNamedQuery(anyString(), (Class<Customer>) anyObject())).thenReturn(mockQuery);
 		when(mockQuery.setParameter(anyString(), anyString())).thenReturn(mockQuery);
 
-		List<Customer> expectedCustomerList = Lists.newArrayList(new Customer("Bill", "Koch"));
+		List<Customer> expectedCustomerList = Lists.newArrayList(customer);
 		when(mockQuery.getResultList()).thenReturn(expectedCustomerList);
 
 		List<Customer> customersWithFirstNameLikeBill = uut.withFirstNameLike("Bill");
 
 		assertThat(customersWithFirstNameLikeBill, is(expectedCustomerList));
 
-		verify(mockEntityManager).createQuery(anyString(), (Class<Customer>) anyObject());
+		verify(mockEntityManager).createNamedQuery(anyString(), (Class<Customer>) anyObject());
 		verify(mockQuery).setParameter(anyString(), anyString());
 		verify(mockQuery).getResultList();
 	}
