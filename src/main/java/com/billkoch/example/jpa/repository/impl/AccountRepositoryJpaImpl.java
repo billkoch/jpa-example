@@ -6,6 +6,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Component;
 
 import com.billkoch.example.jpa.domain.Account;
+import com.billkoch.example.jpa.repository.AccountRepository;
 
 @Component
 public class AccountRepositoryJpaImpl implements AccountRepository {

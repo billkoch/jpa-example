@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.billkoch.example.jpa.domain.Account;
+import com.billkoch.example.jpa.repository.AccountRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/databaseTestApplicationContext.xml"})

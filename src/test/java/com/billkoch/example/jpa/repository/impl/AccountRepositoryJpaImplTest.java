@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.billkoch.example.jpa.domain.Account;
+import com.billkoch.example.jpa.repository.AccountRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccountRepositoryJpaImplTest {
