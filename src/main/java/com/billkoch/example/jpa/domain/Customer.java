@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import org.apache.commons.lang.StringUtils;
+
 @NamedQueries({
 	@NamedQuery(name="withLastNameLike", query="select c from Customer c where lastName like :lastName"),
 	@NamedQuery(name="withFirstNameLike", query="select c from Customer c where firstName like :firstName")
@@ -42,32 +44,48 @@ public class Customer {
 		this.id = id;
 	}
 
-	public String getFirstName() {
-		return firstName;
-	}
-	
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		boolean result = false;
-		if (this == obj) {
+		if(obj == this) {
 			result = true;
-
-		} else if (obj instanceof Customer) {
+			
+		} else if(obj instanceof Customer) {
 			Customer that = (Customer) obj;
-			result = this.id.equals(that.id);
+			result = StringUtils.equals(this.id, that.id);
 		}
 		return result;
+	}
+	
+	public static class Builder {
+		
+		private String id;
+		
+		private String lastName;
+		
+		private String firstName;
+		
+		public Builder id(String id) {
+			this.id = id;
+			return this;
+		}
+		
+		public Builder lastName(String lastName) {
+			this.lastName = lastName;
+			return this;
+		}
+		
+		public Builder firstName(String firstName) {
+			this.firstName = firstName;
+			return this;
+		}
+		
+		public Customer build() {
+			Customer customer = new Customer();
+			customer.id = this.id;
+			customer.firstName = this.firstName;
+			customer.lastName = this.lastName;
+			return customer;
+		}
 	}
 }

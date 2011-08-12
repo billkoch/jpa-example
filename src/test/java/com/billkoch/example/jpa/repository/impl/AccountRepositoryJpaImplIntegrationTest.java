@@ -4,10 +4,12 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +21,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.billkoch.example.jpa.domain.Account;
+import com.billkoch.example.jpa.domain.Customer;
 import com.billkoch.example.jpa.repository.AccountRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,7 +35,7 @@ public class AccountRepositoryJpaImplIntegrationTest extends AbstractTransaction
 	
 	@Before
 	public void setup() {
-		account = new Account();
+		account = new Account.Builder().customer(new Customer()).build();
 	}
 
 	@Test
@@ -54,5 +57,26 @@ public class AccountRepositoryJpaImplIntegrationTest extends AbstractTransaction
 		}, new Object[]{accountId});
 		
 		assertThat(account, is(persistedAccount));
+	}
+	
+	@Test
+	public void retrievingAccountsByCustomer() {
+		List<Account> accounts = uut.belongingToCustomer(new Customer.Builder().id("1").build());
+		
+		List<Account> expectedAccounts = simpleJdbcTemplate.query("select a.id, c.id, c.last_name, c.first_name from account a inner join customer c on (a.customer_id = c.id) where a.id=?", new RowMapper<Account>() {
+
+			@Override
+			public Account mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+				Customer persistedCustomer = new Customer.Builder().id(resultSet.getString(2)).lastName(resultSet.getString(3)).firstName(resultSet.getString(4)).build();
+				
+				Account persistedAccount = new Account.Builder().id(resultSet.getString(1)).customer(persistedCustomer).build();
+				return persistedAccount;
+			}
+				
+		}, new Object[]{"1"});
+		
+		assertThat(accounts, is(notNullValue()));
+		assertThat(accounts, hasSize(1));
+		assertThat(accounts, is(expectedAccounts));
 	}
 }

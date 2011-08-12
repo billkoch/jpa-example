@@ -31,16 +31,17 @@ public class CustomerRepositoryJpaImplIntegrationTest extends AbstractTransactio
 	@Autowired
 	private CustomerRepository uut;
 
-	private Customer customer;
+	private Customer expectedCustomer;
 
 	@Before
 	public void setup() {
-		customer = new Customer("Bill", "Koch");
+		expectedCustomer = new Customer.Builder().id("1").firstName("Bill").lastName("Koch").build();
 	}
 
 	@Test
 	public void savingACustomerShouldPersistTheCustomerInTheDatabase() {
-		String customerId = uut.save(customer);
+		Customer aBrandNewCustomer = new Customer.Builder().firstName("Bill").lastName("Koch").build();
+		String customerId = uut.save(aBrandNewCustomer);
 
 		assertThat(customerId, is(notNullValue()));
 		assertThat(customerId, is(not(equalTo(""))));
@@ -57,15 +58,12 @@ public class CustomerRepositoryJpaImplIntegrationTest extends AbstractTransactio
 				}
 				, new Object[]{customerId});
 		
-		assertThat(customer, is(persistedCustomer));
+		assertThat(aBrandNewCustomer, is(persistedCustomer));
 	}
 	
 	@Test
 	public void withLastNameLikeShouldReturnListOfCustomers() {
 		List<Customer> customersWithLastNameLikeKoch = uut.withLastNameLike("Koch");
-		
-		Customer expectedCustomer = new Customer("Bill", "Koch");
-		expectedCustomer.setId("1");
 		
 		assertThat(customersWithLastNameLikeKoch, is(notNullValue()));
 		assertThat(customersWithLastNameLikeKoch, hasSize(1));
@@ -74,6 +72,9 @@ public class CustomerRepositoryJpaImplIntegrationTest extends AbstractTransactio
 	
 	@Test
 	public void withFirstNameLikeShouldReturnListOfCustomers() {
-		uut.withFirstNameLike("Bill");
+		List<Customer> customersWithFirstNameLikeBill = uut.withFirstNameLike("Bill");
+		
+		assertThat(customersWithFirstNameLikeBill, is(notNullValue()));
+		assertThat(customersWithFirstNameLikeBill, hasSize(1));
 	}
 }
